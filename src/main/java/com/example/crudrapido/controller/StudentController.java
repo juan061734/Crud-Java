@@ -20,6 +20,9 @@ public class StudentController {
     @GetMapping({ "/students", "/" })
     public String getAllStudents(Model modelo) {
         modelo.addAttribute("students", studentService.getStudents());
+        Student StudentEmpty = new Student();
+        modelo.addAttribute("student", StudentEmpty);
+
         return "students"; // nos retorna al archivo students
     }
 
@@ -58,6 +61,16 @@ public class StudentController {
     @GetMapping("/students/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.delete(id);
+        return "redirect:/students";
+    }
+
+    @PostMapping("/students/buscar")
+    public String searchStudent(Model model, @ModelAttribute("student") Student student) {
+        var studentfind = studentService.getStudent(student.getStudentId());
+        Student StudentEmpty = new Student();
+        if (studentfind != StudentEmpty) {
+            model.addAttribute("student", studentfind);
+        }
         return "redirect:/students";
     }
 }
