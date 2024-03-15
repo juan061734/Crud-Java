@@ -18,10 +18,9 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping({ "/students", "/" })
-    public String getAllStudents(Model modelo) {
-        modelo.addAttribute("students", studentService.getStudents());
-        Student StudentEmpty = new Student();
-        modelo.addAttribute("student", StudentEmpty);
+    public String getAllStudents(Model model) {
+        model.addAttribute("student", new Student());
+        model.addAttribute("students", studentService.getStudents());
 
         return "students"; // nos retorna al archivo students
     }
@@ -64,13 +63,21 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    @PostMapping("/students/buscar")
-    public String searchStudent(Model model, @ModelAttribute("student") Student student) {
-        var studentfind = studentService.getStudent(student.getStudentId());
-        Student StudentEmpty = new Student();
-        if (studentfind != StudentEmpty) {
-            model.addAttribute("student", studentfind);
+    @PostMapping("/students/search")
+    public String searchStudent(@ModelAttribute("student") Student student, Model model) {
+        Student studentAlone = new Student();
+        try {
+            Student findStudent = studentService.getStudent(student.getStudentId());
+            if (findStudent != studentAlone) {
+                model.addAttribute("student", findStudent);
+                return "students";
+            } else {
+                return "students";
+            }
+        } catch (Exception e) {
+            // return ("Error: " + e);
+            return "students";
         }
-        return "redirect:/students";
     }
+
 }

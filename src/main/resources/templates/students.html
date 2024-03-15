@@ -25,11 +25,7 @@
         background-color: rgba(244, 235, 235, 0.5);
       }
       .gradient-bg {
-        background: linear-gradient(
-          to bottom,
-          violet,
-          white
-        ); /* Cambia "to bottom" según la dirección del gradiente que desees */
+        background: linear-gradient(to bottom, violet, white);
       }
     </style>
   </head>
@@ -60,26 +56,60 @@
         </div>
       </div>
       <br />
-      <form
-        th:action="@{/students/buscar}"
-        th:object="${student}"
-        method="POST"
-      >
-        <div class="form-group">
-          <label>INGRESE EL ID A BUSCAR DEL ESTUDIANTE A BUSCARj : </label>
-          <input
-            type="text"
-            name="id"
-            th:field="*{studentId}"
-            class="form-control"
-            placeholder="Digite el id : "
-            required
-          />
-          <div class="box-footer">
-            <button class="btn btn-success">Buscar</button>
+      <section class="col-sm-19 col-md-12 d-flex">
+        <form
+          th:action="@{/students/search}"
+          th:object="${student}"
+          method="POST"
+        >
+          <div class="form-group m-4">
+            <label class="form-label"
+              >INGRESE EL ID DEL ESTUDIANTE:
+              <input
+                type="text"
+                th:field="*{studentId}"
+                class="form-control"
+                placeholder="Digite su id"
+                required
+              />
+            </label>
+            <button class="btn btn-primary">Buscar</button>
           </div>
-        </div>
-      </form>
+        </form>
+
+        <table class="table table-striped table-bordered table-transparent">
+          <thead class="table thead light gradient-bg">
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Nombres</th>
+              <th scope="col">Apellidos</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <tr th:value="student">
+              <td th:text="${student.studentId}">Id</td>
+              <td th:text="${student.firstName}">Nombre</td>
+              <td th:text="${student.lastName}">Apellido</td>
+              <td th:text="${student.email}">Correo</td>
+              <td>
+                <a
+                  th:href="@{/students/update/{id}(id=${student.studentId})}"
+                  class="btn btn-info"
+                  >Editar</a
+                >
+                <a
+                  th:href="@{/students/delete/{id}(id=${student.studentId})}"
+                  class="btn btn-danger"
+                  >Eliminar</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
       <table class="table table-striped table-bordered table-transparent">
         <thead class="thead light gradient-bg">
           <tr>
